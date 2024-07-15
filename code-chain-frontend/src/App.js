@@ -6,6 +6,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const handleSearch = () => {
     const studentID = inputRef.current.value;
+    setData(null);
     setLoading(true);
     fetch(`https://script.google.com/macros/s/AKfycbyYsQdagBqFXxw3hAC25jdlLz9SgzCUQ1v7BkDda8J9QBl7xjvkC3ulR0iY-bodtU7iSA/exec?action=getUserById&StudentID=${studentID}`)
       .then(response => response.json())
@@ -34,9 +35,23 @@ function App() {
         </div>
         {
         loading && 
-        <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-70 flex justify-center items-center">
-          Loading
+        <>
+          <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-40 justify-center items-center flex flex-row gap-2">
+            <span className="loading loading-infinity loading-lg bg-gradient-to-r from-blue-300 to-blue-900"></span>
+          </div>
+          <div className="flex flex-col p-2">
+            <div className="flex flex-col gap-4 w-full">
+              <span className="skeleton h-7 w-40 sm:w-96"></span>
+              <span className="skeleton h-7 w-32 sm:w-80"></span>
+              <span className="skeleton h-7 w-24 sm:w-64"></span>
+              <span className="skeleton h-7 w-24 sm:w-64"></span>
+              <span className="skeleton h-7 w-24 sm:w-64"></span>
+              <span className="skeleton h-7 w-24 sm:w-64"></span>
+            </div>
         </div>
+        </>
+        
+        
         }
 
         {
