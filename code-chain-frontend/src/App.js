@@ -10,31 +10,28 @@ function App() {
     fetch(`https://script.google.com/macros/s/AKfycbyYsQdagBqFXxw3hAC25jdlLz9SgzCUQ1v7BkDda8J9QBl7xjvkC3ulR0iY-bodtU7iSA/exec?action=getUserById&StudentID=${studentID}`)
       .then(response => response.json())
       .then(data => {
-        setData(data);
-        setLoading(false);
+        if(data){
+          setData(data);
+          setLoading(false);
+        }else{
+          document.getElementById('my_modal_1').showModal()
+          setLoading(false);
+        }
+        
       });
   }
 
   return (
     <>
-      <div className="flex flex-col justify-center items-center w-full h-[100svh] relative gap-32">
-        <div className="join">
-        <label className="input input-bordered flex items-center gap-2">
-          <input ref={inputRef} type="text" className="grow" placeholder="Search" />
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            fill="currentColor"
-            className="h-4 w-4 opacity-70">
-            <path
-              fillRule="evenodd"
-              d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-              clipRule="evenodd" />
-          </svg>
-        </label>
-        <button onClick={()=>handleSearch()} className="btn btn-primary">Search</button>
+      <div className="flex flex-col justify-center items-center w-full h-[100svh] relative gap-16 p-5">
+        <div className="flex flex-col gap-4">
+          <span className="text-xl font-bold sm:text-3xl">Enter your Student ID to see hints</span>
+          <div className="flex flex-col gap-2">
+            <input type="number" placeholder="Enter your Student ID" ref={inputRef} className="textarea textarea-xs sm:textarea-md  textarea-bordered" >
+            </input>
+            <button onClick={()=>handleSearch()} className="btn btn-primary">Search</button>
+          </div>
         </div>
-
         {
         loading && 
         <div className="absolute top-0 left-0 w-full h-full bg-black bg-opacity-70 flex justify-center items-center">
@@ -44,17 +41,30 @@ function App() {
 
         {
         data &&
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-2">
-            <span className="text-lg">Student ID: {data.StudentID}</span>
-            <span className="text-lg">Name - Surname: {data.FullName}</span>
-            <span className="text-lg">Hint1: {data.Hint1}</span>
-            <span className="text-lg">Hint2: {data.Hint2}</span>
-            <span className="text-lg">Hint3: {data.Hint3}</span>
-            <span className="text-lg">Hint3: {data.Hint4}</span>
+        <div className="flex flex-col p-5">
+          <div className="flex flex-col gap-4 w-full">
+            <span className="sm:text-xl ">Student ID: {data.StudentID}</span>
+            <span className="sm:text-xl ">Name - Surname: {data.FullName}</span>
+            <span className="sm:text-xl break-all text-primary">Hint1: {data.Hint1}</span>
+            <span className="sm:text-xl break-all text-secondary">Hint2: {data.Hint2}</span>
+            <span className="sm:text-xl break-all text-warning">Hint3: {data.Hint3}</span>
+            <span className="sm:text-xl break-all text-success">Hint4: {data.Hint4}</span>
           </div>
         </div>
         }
+
+        <dialog id="my_modal_1" className="modal">
+          <div className="modal-box">
+            <h3 className="font-bold text-lg">Something went wrong!</h3>
+            <p className="py-4">Please check your Student ID</p>
+            <p className="py-3">Student ID: <span className="text-lg font-bold text-error break-all">{inputRef.current?.value ? inputRef.current.value : ""}</span></p>
+            <div className="modal-action">
+              <form method="dialog">
+                <button className="btn">Close</button>
+              </form>
+            </div>
+          </div>
+        </dialog>
         
       </div>
     </>
